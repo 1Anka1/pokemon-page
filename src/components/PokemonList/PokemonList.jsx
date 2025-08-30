@@ -1,15 +1,5 @@
-// import { getAllPokemon } from '../../redux/pokemon/pokemonOperations';
-// import { selectPokemonList } from '../../redux/pokemon/pokemonSelector';
-
-// const pokemons = useSelector(selectPokemonList);
-// const dispatch = useDispatch();
-// useEffect(() => {
-//   dispatch(getAllPokemon(limit));
-// }, [dispatch, limit]);
-
 import { useState } from 'react';
 import { useAllPokemon } from '../../hooks/usePokemon';
-
 import { TopUp } from '../../shared/ui/TopUp/TopUp';
 import { Link } from 'react-router-dom';
 import { Search } from '../../shared/ui/Search/Search';
@@ -19,7 +9,6 @@ import axios from 'axios';
 
 export const PokemonList = () => {
   const queryClient = useQueryClient();
-
   const [limit, setLimit] = useState(30);
   const [inputName, setInputName] = useState('');
   const { data: pokemons, isLoading } = useAllPokemon(limit);
@@ -42,15 +31,14 @@ export const PokemonList = () => {
   };
 
   const preFetchPokemons = async (name) => {
-    await queryClient.prefetchQuery(
-      ['pokemon', name],
-      async () => {
+    await queryClient.prefetchQuery({
+      queryKey: ['pokemon', name],
+      queryFn: async () => {
         const { data } = await axios.get(`pokemon/${name}`);
-        console.log(name);
         return data;
       },
-      { staleTime: 1000 * 60 }
-    );
+      staleTime: 1000 * 60,
+    });
   };
 
   return (
@@ -94,7 +82,7 @@ export const PokemonList = () => {
         <button
           onClick={handleChangeLimit}
           type="button"
-          className="bg-red-500 text-white px-7 py-3 rounded hover:bg-red-600 transition mb-8"
+          className="text-lg mb-8 bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
         >
           Load more
         </button>

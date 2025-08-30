@@ -14,7 +14,6 @@ export const getPokemonByName = async (name) => {
 export const getAllPokemon = async (limit) => {
   try {
     const { data } = await axios.get(`pokemon?offset=0&limit=${limit}`);
-
     return data;
   } catch (error) {
     throw error;

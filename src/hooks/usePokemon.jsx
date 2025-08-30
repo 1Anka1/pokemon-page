@@ -13,5 +13,6 @@ export const usePokemonByName = (name) => {
   return useQuery({
     queryKey: ['pokemon', name],
     queryFn: () => getPokemonByName(name),
+    staleTime: 1000 * 60,
   });
 };
